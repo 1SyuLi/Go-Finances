@@ -35,7 +35,7 @@ const Schema = Yup.object().shape({
     amount: Yup.number().typeError('Informe um valor numérico').positive('O valor não pode ser negativo').required('O valor é obrigatório'),
 })
 
-const dataKey = "@gofinance:transaction";
+
 
 export function Register(){
 
@@ -68,6 +68,8 @@ export function Register(){
         setCategoryModalOpen(false)
     }
 
+    const dataKey = "@gofinance:transaction";
+    
 async function handleRegister(form:FormData){
 
         if(!transactionType) return Alert.alert('selecione o tipo da transação');
