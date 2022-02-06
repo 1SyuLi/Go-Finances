@@ -2,12 +2,14 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { HistoryCard } from '../../components/HistoryCard';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { categories } from '../../utils/categories';
+import { VictoryPie } from 'victory-native';
 
 import {
     Container,
     Header,
     Title,
     Content,
+    ChartContainer,
 } from './styles';
 import { useFocusEffect } from '@react-navigation/native';
 
@@ -24,7 +26,8 @@ interface TransactionData{
 interface CategoryData{
     key: string;
     name: string;
-    total: string;
+    total: number;
+    totalFormatted: string;
     color: string;
 }
 
@@ -53,7 +56,7 @@ export function Resume(){
             })
 
             if(categorySum > 0){
-                const total = categorySum.toLocaleString('pt-BR', {
+                const totalFormatted = categorySum.toLocaleString('pt-BR', {
                     style: 'currency',
                     currency: 'BRL'
                 });
@@ -63,7 +66,8 @@ export function Resume(){
                     key: category.key,
                     name: category.name,
                     color: category.color,
-                    total,
+                    total: categorySum,
+                    totalFormatted,
                 })
             }
 
@@ -86,13 +90,24 @@ export function Resume(){
                 <Title>Resumo por categoria</Title>
             </Header>
 
+            <ChartContainer>
+                    <VictoryPie
+                        height={300} 
+                        data={totalByCategories}
+                        x="name"
+                        y="total"
+
+                    />
+            </ChartContainer>
+
+
             <Content>
             {
                 totalByCategories.map(item => (
                     <HistoryCard
                         key={item.key} 
                         title={item.name}
-                        amount={item.total}
+                        amount={item.totalFormatted}
                         color={item.color}
                     />
                 ))
