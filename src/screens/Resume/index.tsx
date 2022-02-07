@@ -20,7 +20,9 @@ import {
     MonthSelectButton,
     MonthSelectSelectIcon,
     Month,
+    LoadContainer
 } from './styles';
+import { ActivityIndicator } from 'react-native';
 
 
 interface TransactionData{
@@ -44,6 +46,7 @@ interface CategoryData{
 
 export function Resume(){
     const [totalByCategories, setTotalByCategories] = useState<CategoryData[]>([]);
+    const [isLoading, setLoading] = useState(false);
     const [selectedDate, setSelectedDate] = useState(new Date());
     const theme = useTheme();
 
@@ -57,7 +60,7 @@ export function Resume(){
     }
 
     async function loadData(){
-
+        setLoading(true);
         const dataKey = "@gofinance:transaction";
         const response = await AsyncStorage.getItem(dataKey);
         const responseFormatted = response ? JSON.parse(response) : [];
@@ -108,11 +111,8 @@ export function Resume(){
         })
 
         setTotalByCategories(totalByCategory);
+        setLoading(false);
     }
-
-    useEffect(() => {
-        loadData();
-    }, [selectedDate]);
 
     useFocusEffect(useCallback(() => {
         loadData();
@@ -124,7 +124,13 @@ export function Resume(){
                 <Title>Resumo por categoria</Title>
             </Header>
 
-
+        {
+            isLoading === true 
+            ? 
+            <LoadContainer> 
+                <ActivityIndicator  color={theme.colors.primary} size="large"/> 
+            </LoadContainer> 
+            :
             <Content
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{
@@ -177,8 +183,7 @@ export function Resume(){
                     ))
                 }
             </Content>
-
-
+        }
         </Container>
     )
 }

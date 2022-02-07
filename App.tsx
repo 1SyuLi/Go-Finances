@@ -15,13 +15,6 @@ import {
 
 import theme from './src/Global/Styles/theme';
 import { NavigationContainer } from '@react-navigation/native';
-
-import { Dashboard } from './src/screens/Dashboard'
-import { Register } from './src/screens/Register';
-import { CategorySelected } from './src/screens/CategorySelected';
-
-
-
 import { AppRoutes } from './src/routes/app.routes';
 
 export default function App() {
@@ -38,7 +31,7 @@ export default function App() {
 
   return (
     <>
-      <StatusBar backgroundColor="#5636d3"/>
+      <StatusBar backgroundColor="#5636d3" barStyle="light-content"/>
         <ThemeProvider theme={theme}>
           <NavigationContainer>
             <AppRoutes />
