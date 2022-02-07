@@ -3,8 +3,11 @@ import 'intl';
 import 'intl/locale-data/jsonp/pt-BR';
 import { StatusBar } from 'react-native';
 import AppLoading from 'expo-app-loading';
-
+import theme from './src/Global/Styles/theme';
+import { NavigationContainer } from '@react-navigation/native';
 import { ThemeProvider } from 'styled-components';
+import { AppRoutes } from './src/routes/app.routes';
+import { SignIn } from './src/screens/SignIn';
 
 import {
   useFonts,
@@ -13,9 +16,6 @@ import {
   Poppins_700Bold,
 } from '@expo-google-fonts/poppins'
 
-import theme from './src/Global/Styles/theme';
-import { NavigationContainer } from '@react-navigation/native';
-import { AppRoutes } from './src/routes/app.routes';
 
 export default function App() {
 
@@ -34,7 +34,8 @@ export default function App() {
       <StatusBar backgroundColor="#5636d3" barStyle="light-content"/>
         <ThemeProvider theme={theme}>
           <NavigationContainer>
-            <AppRoutes />
+            {/* <AppRoutes /> */}
+            <SignIn />
           </NavigationContainer>
         </ThemeProvider>
     </>
