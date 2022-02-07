@@ -3,6 +3,9 @@ import { HistoryCard } from '../../components/HistoryCard';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { categories } from '../../utils/categories';
 import { VictoryPie } from 'victory-native';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { useFocusEffect } from '@react-navigation/native';
+import { useTheme } from 'styled-components'; 
 
 import {
     Container,
@@ -11,7 +14,6 @@ import {
     Content,
     ChartContainer,
 } from './styles';
-import { useFocusEffect } from '@react-navigation/native';
 
 
 interface TransactionData{
@@ -29,11 +31,13 @@ interface CategoryData{
     total: number;
     totalFormatted: string;
     color: string;
+    percent: string;
 }
 
 
 export function Resume(){
     const [totalByCategories, setTotalByCategories] = useState<CategoryData[]>([]);
+    const theme = useTheme();
 
     async function loadData(){
 
@@ -43,6 +47,10 @@ export function Resume(){
 
         const expensives = responseFormatted
         .filter((expensive:TransactionData) => expensive.type === 'negative');
+
+        const expensivesTotal = expensives.reduce((acumullator: number, expensive: TransactionData) => {
+            return acumullator + Number(expensive.amount)
+        }, 0)
 
         const totalByCategory: CategoryData[] = [];
 
@@ -61,6 +69,8 @@ export function Resume(){
                     currency: 'BRL'
                 });
 
+                const percent = `${(categorySum / expensivesTotal * 100).toFixed(0)}%`
+
 
                 totalByCategory.push({
                     key: category.key,
@@ -68,6 +78,7 @@ export function Resume(){
                     color: category.color,
                     total: categorySum,
                     totalFormatted,
+                    percent,
                 })
             }
 
@@ -92,10 +103,19 @@ export function Resume(){
 
             <ChartContainer>
                     <VictoryPie
-                        height={300} 
                         data={totalByCategories}
-                        x="name"
+                        colorScale={totalByCategories.map(category => category.color)}
+                        style={{
+                            labels: { 
+                                fontSize: RFValue(18),
+                                fontWeight: 'bold',
+                                fill: theme.colors.shape,
+                            }
+                        }}
+                        labelRadius={65}
+                        x="percent"
                         y="total"
+                        height={300} 
 
                     />
             </ChartContainer>
