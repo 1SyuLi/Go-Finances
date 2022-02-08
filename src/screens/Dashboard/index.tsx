@@ -4,8 +4,9 @@ import { HighlightCard } from '../../components/HighlightCard';
 import { TransactionCard, TransactionCardProps } from '../../components/TransactionsCard';
 import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { useAuth } from '../../hooks/auth';
 import { useTheme } from 'styled-components';
+
 
 
 
@@ -42,6 +43,7 @@ interface HighlightData {
 export function Dashboard() {
 
     const theme = useTheme();
+    const { SignOut, user } = useAuth();
 
     function getLastTransactionDate(
         collection: TransactionCardProps[],
@@ -161,15 +163,15 @@ export function Dashboard() {
                         <UserContainer>
                         <UserInfo>
                             <Photo
-                                source={{ uri: 'https://avatars.githubusercontent.com/u/84464007?v=4' }}
+                                source={{ uri: user.photo }}
                             />
                             <User>
                                 <UserGrettings>Olá,</UserGrettings>
-                                <UserName>Ruan</UserName>
+                                <UserName>{user.name}</UserName>
                             </User>
                         </UserInfo>
 
-                        <LogoufButton onPress={() => {}}>
+                        <LogoufButton onPress={SignOut}>
                             <LogoufIcon name="power"/>
                         </LogoufButton>
                         </UserContainer>
