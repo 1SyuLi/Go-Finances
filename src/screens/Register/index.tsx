@@ -15,6 +15,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import uuid from 'react-native-uuid';
 
 import { CategorySelected } from "../CategorySelected";
+import { useAuth } from "../../hooks/auth";
 
 import {
     Container,
@@ -48,6 +49,8 @@ export function Register(){
 
     const Navigation = useNavigation();
 
+    const { user } = useAuth();
+
     const { control,formState: {errors}, handleSubmit, reset } = useForm({
         resolver: yupResolver(Schema),
     });
@@ -70,7 +73,7 @@ export function Register(){
         setCategoryModalOpen(false)
     }
 
-    const dataKey = "@gofinance:transaction";
+    const dataKey = `@gofinance:transaction_user:${user.id}`;
     
 async function handleRegister(form:FormData){
 

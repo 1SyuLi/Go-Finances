@@ -3,12 +3,14 @@ import { HistoryCard } from '../../components/HistoryCard';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { categories } from '../../utils/categories';
 import { VictoryPie } from 'victory-native';
+import { ActivityIndicator } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useFocusEffect } from '@react-navigation/native';
 import { useTheme } from 'styled-components';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { addMonths, subMonths, format } from 'date-fns';
 import { ptBR } from 'date-fns/locale'; 
+import { useAuth } from '../../hooks/auth';
 
 import {
     Container,
@@ -22,7 +24,6 @@ import {
     Month,
     LoadContainer
 } from './styles';
-import { ActivityIndicator } from 'react-native';
 
 
 interface TransactionData{
@@ -49,6 +50,7 @@ export function Resume(){
     const [isLoading, setLoading] = useState(false);
     const [selectedDate, setSelectedDate] = useState(new Date());
     const theme = useTheme();
+    const { user } = useAuth();
 
 
     function handleDateChange(action: 'next' | 'previous'){
@@ -61,7 +63,7 @@ export function Resume(){
 
     async function loadData(){
         setLoading(true);
-        const dataKey = "@gofinance:transaction";
+        const dataKey = `@gofinance:transaction_user:${user.id}`;
         const response = await AsyncStorage.getItem(dataKey);
         const responseFormatted = response ? JSON.parse(response) : [];
 
