@@ -28,8 +28,6 @@ describe('Input Component', () => {
             }
         );
 
-        debug();
-
         const input = getByTestId('input-email');
         expect(input.props.style[0].borderColor).toEqual(theme.colors.attention);
         expect(input.props.style[0].borderWidth).toEqual(3);
